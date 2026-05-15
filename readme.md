@@ -58,15 +58,98 @@ bash scripts/install.sh
 
 ### SFT
 
+Prepare your training data in the following JSON format:
+
+```json
+{
+  "messages": [
+    {"role": "user", "content": [
+      {"type": "video", "video": "path/to/video.mp4"},
+      {"type": "text", "text": "What is happening in this video?"}
+    ]},
+    {"role": "assistant", "content": "The video shows..."}
+  ]
+}
+```
+
+Example dataset structure for LLaMA-Factory:
+```
+data/
+├── dataset_info.json
+└── your_dataset/
+    └── train.json
+```
+
 ### RL
 
+For RL training with verl, prepare parquet files with the following schema:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `messages` | list | Chat messages with video references |
+| `reward_func` | str | Reward function name |
+| `extra_fields` | dict | Additional fields for custom rewards |
+
 ### Eval
+
+Download the benchmark datasets and configure paths in `benchmarks.json`. Supported benchmarks:
+- **V2P-Bench**: Instance-level video understanding with visual prompts
+- **VideoMME**: Comprehensive video understanding
+- **LongVideoBench**: Long-form video understanding
+- **VideoSIAH-Eval**: Video reasoning evaluation
 
 ## Start Training
 
 ### SFT
 
+1. Configure your training settings in `LLaMA-Factory/examples`:
+
+```yaml
+# examples/qwen3vl_full_sft.yaml
+model:
+  pretrained: /path/to/your/model
+  verl: false
+
+dataset:
+  - your_dataset
+
+output_dir: ./saves/qwen3vl/full
+
+training:
+  batch_size: 1
+  learning_rate: 1.0e-5
+  num_epochs: 3
+  max_steps: 1000
+```
+
+2. Start training:
+```bash
+# Configure paths in recipe/start_train.sh first
+bash LLaMA-Factory/recipe/start_train.sh
+```
+
 ### RL
+
+1. Configure your training settings:
+
+```bash
+# Configure paths in verl/recipe/start_train.sh
+MODEL_PATH="/path/to/your/model"
+TRAIN_DATA_PATH="/path/to/train_data.parquet"
+VAL_DATA_PATH="/path/to/val_data.parquet"
+TOOL_CONFIG_PATH="verl/examples/video_tools/config/mcp_tool_config_1tool.yaml"
+```
+
+2. Start RL training with GRPO:
+```bash
+bash verl/recipe/start_train.sh
+```
+
+Key RL training parameters:
+- `data.train_batch_size`: Training batch size
+- `actor_rollout_ref.actor.optim.lr`: Learning rate
+- `actor_rollout_ref.rollout.n`: Number of rollouts per prompt
+- `actor_rollout_ref.rollout.multi_turn.tool_config_path`: Tool configuration
 
 ## Evaluation
 
