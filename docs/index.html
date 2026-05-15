@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flow-OPD</title>
+    <meta
+      name="description"
+      content="Flow-OPD: On-Policy Distillation for Generalist Flow Matching Text-to-Image Generation."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Flow-OPD: On-Policy Distillation for Flow Matching Models" />
+    <meta property="og:description" content="Replacing sparse scalar rewards with dense, trajectory-level, multi-teacher vector field supervision." />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Flow-OPD" />
+    <meta name="twitter:description" content="On-Policy Distillation for Generalist Flow Matching Text-to-Image Generation." />
+
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* ===== Override vars for Flow-OPD palette ===== */
+      :root {
+        --purple: #7C3AED;
+        --purple-soft: #F3EFFF;
+        --purple-accent: #5B21B6;
+        --purple-mid: #A78BFA;
+        --shadow: 0 16px 40px rgba(124, 58, 237, 0.10);
+      }
+
+      /* ===== Pipeline Diagram ===== */
+      .pipeline-diagram {
+        display: flex;
+        align-items: stretch;
+        gap: 0;
+        margin: 24px 0 0;
+        overflow-x: auto;
+        padding-bottom: 6px;
+      }
+      .pipeline-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 130px;
+        flex: 1;
+      }
+      .pipeline-node {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 14px;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 6px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .pipeline-node.p-base { border-color: #d1d5db; color: #6b7280; }
+      .pipeline-node.p-s1 { border-color: #ddd6fe; color: var(--purple); background: var(--purple-soft); }
+      .pipeline-node.p-s2 { border-color: #a5f3fc; color: #0891b2; background: #ecfeff; }
+      .pipeline-node.p-out { border-color: #fde68a; color: #b45309; background: #fffbeb; }
+      .pipeline-node.p-teacher {
+        border-color: #bbf7d0; color: #047857; background: #ecfdf5;
+        font-size: 12px; padding: 6px 10px; margin-bottom: 3px;
+      }
+      .pipeline-label { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+      .pipeline-teacher-col { display: flex; flex-direction: column; gap: 3px; width: 100%; }
+      .pipeline-arrow { display: flex; align-items: center; padding: 0 6px; color: #d1d5db; font-size: 1.3rem; flex-shrink: 0; }
+
+      /* ===== Results Cards ===== */
+      .result-card.wide { grid-column: 1 / -1; }
+      .result-card { border: 1px solid var(--line); border-radius: 12px; padding: 20px; background: var(--soft); }
+      .result-card h3 { margin: 0 0 12px; font-size: 16px; }
+      .result-card p { margin: 0; color: var(--muted); font-size: 13px; }
+
+      /* ===== Image placeholder ===== */
+      .img-placeholder {
+        background: var(--soft);
+        border: 2px dashed var(--line);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 220px;
+        text-align: center;
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+        margin: 20px 0;
+      }
+      .img-placeholder::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg, transparent, transparent 12px,
+          rgba(223, 227, 232, 0.5) 12px, rgba(223, 227, 232, 0.5) 13px
+        );
+      }
+      .img-placeholder-inner { position: relative; z-index: 1; }
+      .img-placeholder .ip-icon { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.35; }
+      .img-placeholder .ip-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+      .img-placeholder .ip-sub { font-size: 12px; color: var(--muted); max-width: 360px; line-height: 1.6; }
+
+      /* ===== Contributor Cards ===== */
+      .contrib-grid article { border: 1px solid var(--line); border-radius: 12px; padding: 20px; background: var(--soft); }
+      .contrib-grid h3 { margin: 0 0 10px; font-size: 15px; }
+      .contrib-grid p { margin: 0; color: var(--muted); font-size: 13px; }
+
+      /* ===== Key Stats Banner ===== */
+      .key-stats {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin: 24px 0;
+      }
+      .key-stat {
+        flex: 1;
+        min-width: 140px;
+        background: var(--purple-soft);
+        border: 1px solid #ddd6fe;
+        border-radius: 12px;
+        padding: 18px 20px;
+        text-align: center;
+      }
+      .key-stat .ks-val {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--purple);
+        line-height: 1;
+      }
+      .key-stat .ks-label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+        font-weight: 600;
+      }
+
+      /* ===== Citation block ===== */
+      .citation-block {
+        background: var(--soft);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 24px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: var(--muted);
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+        line-height: 1.8;
+      }
+
+      /* ===== Teaser Image ===== */
+      .teaser-img {
+        background: var(--soft);
+        border: 2px dashed var(--line);
+        border-radius: 16px;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .teaser-img::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg, transparent, transparent 12px,
+          rgba(223, 227, 232, 0.5) 12px, rgba(223, 227, 232, 0.5) 13px
+        );
+      }
+      .teaser-img-inner {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 32px;
+      }
+      .teaser-icon { font-size: 3rem; margin-bottom: 14px; opacity: 0.3; }
+      .teaser-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+      .teaser-sub { font-size: 12px; color: var(--muted); line-height: 1.7; max-width: 400px; margin: 0 auto; }
+
+      /* ===== Formula Block ===== */
+      .formula-block {
+        margin-top: 32px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 24px;
+        background: var(--soft);
+      }
+      .formula-block h3 { margin: 0 0 20px; }
+      .formula-item {
+        margin-bottom: 28px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid var(--line);
+      }
+      .formula-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+      .formula-label { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .formula {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px 18px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: var(--ink);
+        overflow-x: auto;
+        margin-bottom: 10px;
+        line-height: 1.8;
+      }
+      .formula-caption { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+      /* ===== Keywords ===== */
+      .keywords {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .kw-badge {
+        background: var(--purple-soft);
+        color: var(--purple);
+        border: 1px solid #ddd6fe;
+        border-radius: 20px;
+        padding: 4px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      /* ===== Responsive ===== */
+      @media (max-width: 680px) {
+        .pipeline-diagram { flex-direction: column; }
+        .pipeline-arrow { transform: rotate(90deg); padding: 4px 0; justify-content: center; }
+        .results-grid { grid-template-columns: 1fr !important; }
+        .key-stats { flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top">Flow-OPD</a>
+      <nav aria-label="Primary navigation">
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#bibtex">BibTeX</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <!-- ===== HERO ===== -->
+      <section class="hero paper-width">
+        <div class="keywords">
+          <span class="kw-badge">T2I</span>
+          <span class="kw-badge">OPD</span>
+        </div>
+        <h1><span class="title-rest">Flow-OPD: On-Policy Distillation for Flow Matching Models</span></h1>
+        <p class="subtitle">
+          To our best knowledge, we present the first integration of On-Policy Distillation into Flow Matching models, achieving exceptional multi-task performance across diverse generative domains.
+        </p>
+
+        <div class="authors" aria-label="Authors">
+          <span><a href="https://costaliya.github.io/" target="_blank">Zhen Fang</a><sup>1*</sup></span>
+          <span>Wenxuan Huang<sup>*&#8224&#8225;</sup></span>
+          <span>Yu Zeng<sup>1</sup></span>
+          <span>Yiming Zhao<sup>1</sup></span>
+          <span>Shuang Chen<sup>2</sup></span>
+          <span>Kaituo Feng<sup>3</sup></span>
+          <span>Yunlong Lin<sup>3</sup></span>
+          <span>Lin Chen<sup>1</sup></span>
+          <span>Zehui Chen<sup>1</sup></span>
+          <span>Shaosheng Cao<sup>4&#8225;</sup></span>
+          <span>Feng Zhao<sup>1</sup></span>
+        </div>
+
+        <div class="affiliations">
+          <p><sup>1</sup>University of Science and Technology of China (USTC) &nbsp;&middot;&nbsp; <sup>2</sup>UCLA &nbsp;&middot;&nbsp; <sup>3</sup>CUHK &nbsp;&middot;&nbsp; <sup>4</sup>Xiaohongshu</p>
+          <p><sup>*</sup>Equal Contribution &nbsp;&middot;&nbsp; <sup>&#8224;</sup>Project Leader &nbsp;&middot;&nbsp; <sup>&#8225;</sup>Corresponding Author</p>
+        </div>
+
+        <div class="actions">
+          <a class="button primary" href="https://github.com/CostaliyA/Flow-OPD/blob/main/flow-opd.pdf" target="_blank">Paper</a>
+          <a class="button" href="https://github.com/CostaliyA/Flow-OPD" target="_blank">&lt;/&gt; Code</a>
+          <a class="button" href="https://huggingface.co/CostaliyA/Flow-OPD" target="_blank">Model</a>
+        </div>
+      </section>
+
+      <!-- ===== TEASER IMAGE ===== -->
+      <div class="paper-width" style="margin: 0 auto 32px; padding: 0 24px;">
+        <img src="teaser.png" alt="Flow-OPD Teaser" style="width:100%;border-radius:16px;display:block;" />
+      </div>
+
+      <!-- ===== KEY STATS ===== -->
+      <section class="section paper-width" id="abstract">
+        <div class="key-stats">
+          <div class="key-stat">
+            <div class="ks-val">+18pt</div>
+            <div class="ks-label">Avg. improvement vs. base</div>
+          </div>
+          <div class="key-stat">
+            <div class="ks-val">+8pt</div>
+            <div class="ks-label">vs. GRPO-Mix (best baseline)</div>
+          </div>
+          <div class="key-stat">
+            <div class="ks-val">0.92</div>
+            <div class="ks-label">GenEval (base: 0.63)</div>
+          </div>
+          <div class="key-stat">
+            <div class="ks-val">0.94</div>
+            <div class="ks-label">OCR accuracy (base: 0.59)</div>
+          </div>
+        </div>
+
+        <h2>Abstract</h2>
+        <p>
+          We identify two critical bottlenecks in multi-task Flow Matching training: <strong>reward sparsity</strong>
+          and <strong>gradient interference</strong>. Standard GRPO works in single-task settings but catastrophically
+          degrades in multi-task settings due to divergent gradients compressing high-dimensional image space into
+          a single scalar reward. Flow-OPD integrates On-Policy Distillation into the Flow Matching pipeline,
+          replacing sparse scalar rewards with dense, trajectory-level, multi-teacher vector field supervision.
+          Evaluated on SD-3.5-Medium, Flow-OPD achieves <strong>+18pt average improvement</strong> over vanilla GRPO
+          and surpasses individual teacher models on OCR and DeQA.
+        </p>
+      </section>
+
+      <!-- ===== METHOD ===== -->
+      <section class="section paper-width" id="method">
+        <h2>Method</h2>
+        <p>
+          Flow-OPD decouples expertise acquisition from model unification through a two-stage process:
+          <strong>Cold Start</strong> initialization followed by <strong>Multi-Teacher On-Policy Distillation</strong>.
+        </p>
+
+        <!-- Pipeline -->
+        <div class="pipeline-diagram">
+          <div class="pipeline-step">
+            <div class="pipeline-label">Base Model</div>
+            <div class="pipeline-node p-base">SD-3.5-M</div>
+          </div>
+          <div class="pipeline-arrow">&#8594;</div>
+          <div class="pipeline-step">
+            <div class="pipeline-label">Stage 1</div>
+            <div class="pipeline-node p-s1">Cold Start</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">SFT or Merge</div>
+          </div>
+          <div class="pipeline-arrow">&#8594;</div>
+          <div class="pipeline-step">
+            <div class="pipeline-label">Stage 2</div>
+            <div class="pipeline-node p-s2">Student &#9679;&#9679;&#9679;</div>
+            <div class="pipeline-label" style="margin-top:6px;">Teachers</div>
+            <div class="pipeline-teacher-col">
+              <div class="pipeline-node p-teacher">GenEval</div>
+              <div class="pipeline-node p-teacher">OCR</div>
+              <div class="pipeline-node p-teacher">DeQA</div>
+              <div class="pipeline-node p-teacher">PickScore</div>
+            </div>
+          </div>
+          <div class="pipeline-arrow">&#8594;</div>
+          <div class="pipeline-step">
+            <div class="pipeline-label">Output</div>
+            <div class="pipeline-node p-out">Unified Student</div>
+          </div>
+        </div>
+
+        <div class="contrib-grid">
+          <article>
+            <h3>Cold Start Initialization</h3>
+            <p>
+              <strong>SFT-based</strong>: fine-tune student on teacher trajectories for stable starting point.
+              <strong>Model Merging</strong>: superpose anisotropic teacher priors without training cost,
+              consistently outperforming SFT across all OOD benchmarks.
+            </p>
+          </article>
+          <article>
+            <h3>On-Policy Sampling (SDE)</h3>
+            <p>
+              Convert the deterministic ODE into a Stochastic Differential Equation (SDE) for stochastic exploration.
+              Sample <em>G</em> trajectories per prompt to generate on-policy marginal distributions.
+            </p>
+          </article>
+          <article>
+            <h3>Multi-Teacher Dense Labeling</h3>
+            <p>
+              Each teacher acts as a Generative Reward Model (GRM), returning a full vector field
+              <code>v<sub>&#x03D5;k</sub></code>. Dynamic routing <code>&#x03B1;<sub>k</sub></code> selects
+              domain experts from GenEval, OCR, DeQA and PickScore.
+            </p>
+          </article>
+          <article>
+            <h3>MAR: Manifold Anchor Regularization</h3>
+            <p>
+              A task-agnostic aesthetic teacher prevents background mode collapse and semantic redundancy.
+              KL regularization from the aesthetic teacher acts as a continuous elastic anchor, decoupling
+              functional alignment from stylistic preservation.
+            </p>
+          </article>
+        </div>
+
+        <!-- ===== KEY FORMULAS ===== -->
+        <div class="formula-block">
+          <h3>Core Formulations</h3>
+
+          <div class="formula-item">
+            <div class="formula-label">On-Policy Sampling (SDE)</div>
+            <div class="formula">
+              dx<sub>t</sub> = [ v<sub>&#x03B8;</sub>(x<sub>t</sub>, t) + (&#x03C3;<sub>t</sub><sup>2</sup>/2t) &#x22C5; (x<sub>t</sub> + (1&#x2212;t)v<sub>&#x03B8;</sub>(x<sub>t</sub>, t)) ] dt + &#x03C3;<sub>t</sub> dw
+            </div>
+            <p class="formula-caption">Converting the deterministic ODE into an SDE for stochastic on-policy exploration. Sampling G trajectories per prompt generates marginal distribution x<sub>t</sub> &#x223C; &#x03C1;<sub>t</sub><sup>&#x03B8;</sup>(&#x22B5; | c).</p>
+          </div>
+
+          <div class="formula-item">
+            <div class="formula-label">Task-Specific Teacher Routing</div>
+            <div class="formula">
+              v<sub>target</sub>(x<sub>t</sub>, t, c) = v<sub>&#x03D5;<sub>k</sub></sub>(x<sub>t</sub>, t, c) &#x2203; c &#x2208; &#x1D34;<sub>k</sub>
+            </div>
+            <p class="formula-caption">Each task &#x1D34;<sub>k</sub> has a dedicated domain expert teacher &#x03D5;<sub>k</sub>. Data belonging to task k is routed exclusively to its corresponding teacher, providing dense supervision without gradient interference across domains.</p>
+          </div>
+
+          <div class="formula-item">
+            <div class="formula-label">Dense KL Reward</div>
+            <div class="formula">
+              D<sub>KL</sub>(&#x03C0;<sub>&#x03B8;</sub> &#x2016; &#x03C0;<sub>target</sub>) = &#x0394;t/2 &#x22C5; (&#x03C3;<sub>t</sub>(1&#x2212;t)/2t + 1/&#x03C3;<sub>t</sub>)<sup>2</sup> &#x22C5; &#x2016;v<sub>&#x03B8;</sub> &#x2212; v<sub>target</sub>&#x2016;<sup>2</sup>
+            </div>
+            <p class="formula-caption">Reverse KL divergence in the SDE framework reduces to a time-weighted L<sub>2</sub> distance between student and teacher vector fields.</p>
+          </div>
+
+          <div class="formula-item">
+            <div class="formula-label">PPO-Clipped Policy Update</div>
+            <div class="formula">
+              J(&#x03B8;) &#x2248; 1/(B&#x22C5;G) &#x2211; min(&#x03C1;<sub>t,i,j</sub>(&#x03B8;)&#x22C5;r<sub>t,i,j</sub><sup>OPD</sup>, clip(&#x03C1;, 1&#x2212;&#x03B5;, 1+&#x03B5;)&#x22C5;r<sub>t,i,j</sub><sup>OPD</sup>)
+            </div>
+            <p class="formula-caption">Clipped surrogate objective bounds the policy trust region. Gradients flow exclusively through the policy ratio &#x03C1;, preserving fine-grained credit assignment.</p>
+          </div>
+
+          <div class="formula-item">
+            <div class="formula-label">Total Training Loss (with MAR)</div>
+            <div class="formula">
+              L<sub>Total</sub>(&#x03B8;) = L<sub>Policy</sub>(&#x03B8;) + &#x03BB; &#x220E;<sub>c,t,x<sub>t</sub>&#x223C;&#x03C1;<sub>t</sub><sup>&#x03B8;</sup></sub> [ w(t) &#x22C5; &#x2016;v<sub>&#x03B8;</sub> &#x2212; v<sub>aesthetic</sub>&#x2016;<sup>2</sup> ]
+            </div>
+            <p class="formula-caption">MAR introduces KL regularization from a frozen aesthetic teacher as a continuous elastic anchor, preventing aesthetic degradation while absorbing functional intelligence.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== RESULTS ===== -->
+      <section class="section paper-width" id="results">
+        <h2>Main Results</h2>
+        <p class="note">
+          Evaluated on SD-3.5-Medium across GenEval, OCR, DeQA, and PickScore.
+          Training on 4&#215;8 H800 GPUs (~50 hours).
+        </p>
+
+        <div class="results-grid">
+          <!-- Overall table -->
+          <article class="result-card wide">
+            <h3>Overall Performance &mdash; Multi-Task Alignment on SD-3.5-M</h3>
+            <div class="table-scroll">
+              <table class="results-table category-table">
+                <thead>
+                  <tr><th>Model</th><th>GenEval &#8593;</th><th>OCR Acc. &#8593;</th><th>DeQA &#8593;</th><th>PickScore &#8593;</th><th>Average &#8593;</th></tr>
+                </thead>
+                <tbody>
+                  <tr style="color: var(--muted);"><td>SD-3.5-M (base)</td><td>0.63</td><td>0.59</td><td>4.07</td><td>21.64</td><td>0.72</td></tr>
+                  <tr><td>+ GRPO-GenEval</td><td>0.94</td><td>0.65</td><td>4.01</td><td>21.53</td><td>0.81</td></tr>
+                  <tr><td>+ GRPO-OCR</td><td>0.64</td><td>0.92</td><td>4.06</td><td>21.69</td><td>0.80</td></tr>
+                  <tr><td>+ GRPO-DeQA</td><td>0.64</td><td>0.66</td><td>4.23</td><td>23.02</td><td>0.76</td></tr>
+                  <tr><td>+ GRPO-PickScore</td><td>0.51</td><td>0.69</td><td>4.22</td><td>23.19</td><td>0.73</td></tr>
+                  <tr><td>GRPO-Mix (3:1:1)</td><td>0.73</td><td>0.83</td><td>4.33</td><td>21.84</td><td>0.82</td></tr>
+                  <tr><td>Ours &mdash; SFT Init</td><td>0.91</td><td>0.92</td><td>4.29</td><td>21.83</td><td>0.88</td></tr>
+                  <tr class="highlight"><td><strong>Ours &mdash; Merge Init</strong></td><td><strong>0.92</strong></td><td><strong>0.94</strong></td><td><strong>4.35</strong></td><td><strong>23.08</strong></td><td><strong>0.90</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <!-- Cold Start ablation -->
+          <article class="result-card">
+            <h3>Cold Start Ablation</h3>
+            <p>T2I-CompBench (OOD Generalization). Model Merging optimally leverages homogeneous teacher priors without additional training cost.</p>
+            <div class="table-scroll" style="margin-top: 12px;">
+              <table class="results-table metric-table">
+                <thead>
+                  <tr><th>Model</th><th>Color</th><th>Shape</th><th>3D-Spatial</th><th>Numeracy</th><th>Overall</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>GRPO-Mix</td><td>0.692</td><td>0.611</td><td>0.422</td><td>0.641</td><td>0.587</td></tr>
+                  <tr><td>Cold Start (w/o OPD)</td><td>0.710</td><td>0.613</td><td>0.425</td><td>0.646</td><td>0.595</td></tr>
+                  <tr class="highlight"><td><strong>Flow-OPD (Merge Init)</strong></td><td><strong>0.719</strong></td><td><strong>0.629</strong></td><td><strong>0.457</strong></td><td><strong>0.684</strong></td><td><strong>0.618</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <!-- MAR ablation -->
+          <article class="result-card">
+            <h3>MAR Ablation</h3>
+            <p>MAR prevents reward hacking by anchoring optimization to a task-agnostic aesthetic manifold.</p>
+            <div class="table-scroll" style="margin-top: 12px;">
+              <table class="results-table metric-table">
+                <thead>
+                  <tr><th>Model</th><th>ImageReward &#8593;</th><th>Aesthetic &#8593;</th><th>HPS-v2.1 &#8593;</th><th>QwenVL &#8593;</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>SD-3.5-M (base)</td><td>1.02</td><td>5.87</td><td>0.298</td><td>3.45</td></tr>
+                  <tr><td>GRPO-Mix</td><td>1.23</td><td>5.93</td><td>0.310</td><td>3.88</td></tr>
+                  <tr><td>Flow-OPD w/o MAR</td><td>1.26</td><td>5.89</td><td>0.300</td><td>3.82</td></tr>
+                  <tr class="highlight"><td><strong>Flow-OPD (w/ MAR)</strong></td><td><strong>1.36</strong></td><td><strong>6.23</strong></td><td><strong>0.330</strong></td><td><strong>4.05</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+
+        <!-- ===== SUBJECTIVE IMAGE #1 ===== -->
+        <div style="margin-top: 32px;">
+          <img src="compare.png" alt="Qualitative Results Comparison" style="width:100%;border-radius:12px;" />
+        </div>
+
+        <!-- ===== SUBJECTIVE IMAGE #2 ===== -->
+        <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+          <img src="more1.png" alt="More Results 1" style="width:100%;border-radius:12px;" />
+          <img src="more2.png" alt="More Results 2" style="width:100%;border-radius:12px;" />
+          <img src="more3.png" alt="More Results 3" style="width:100%;border-radius:12px;" />
+        </div>
+      </section>
+
+      <!-- ===== BIBTEX ===== -->
+      <section class="section paper-width" id="bibtex">
+        <h2>BibTeX</h2>
+        <div class="citation-block">@article{flowopd2026,
+  title   = {Flow-OPD: On-Policy Distillation for Flow Matching Models},
+  author  = {Zhen Fang and Wenxuan Huang and Yu Zeng and Yiming Zhao
+             and Shuang Chen and Kaituo Feng and Yunlong Lin and Jie Liu
+             and Lin Chen and Zehui Chen and Shaosheng Cao and Feng Zhao},
+  year    = {2026}
+}</div>
+        <div style="margin-top: 16px;">
+          <button class="button" onclick="copyCitation()" style="cursor:pointer;">Copy Citation</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer paper-width">
+      <p>Flow-OPD: On-Policy Distillation for Flow Matching Models. &copy; 2026.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      function copyCitation() {
+        const text = `@article{flowopd2026,
+  title   = {Flow-OPD: On-Policy Distillation for Flow Matching Models},
+  author  = {Zhen Fang and Wenxuan Huang and Yu Zeng and Yiming Zhao
+             and Shuang Chen and Kaituo Feng and Yunlong Lin and Jie Liu
+             and Lin Chen and Zehui Chen and Shaosheng Cao and Feng Zhao},
+  year    = {2026}
+}`;
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = event.target.closest('.button');
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.style.color = 'var(--green)';
+          setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
+        });
+      }
+    </script>
+  </body>
+</html>
