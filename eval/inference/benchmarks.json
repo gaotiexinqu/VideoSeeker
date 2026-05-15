@@ -4,7 +4,7 @@
     "root": "/mnt/tidal-alsh01/dataset/zeus/zhaoy/.cache/huggingface/hub/datasets--gaotiexinqu--V2P-Bench/snapshots/f6f0f5bd11cbbc592d9f4a40591669f4649b204d",
     "frames_root": "$ROOT/frames",
     "videos_root": "$ROOT/videos",
-    "dataset_info_path": "$ROOT/dataset_info_1148_sample0p3.json",
+    "dataset_info_path": "$ROOT/dataset_info_1148.json",
     "media_root": "$ROOT/videos",
     "tools": "view_visual_prompt",
     "mode": "tool"
@@ -14,7 +14,7 @@
     "root": "/mnt/tidal-alsh01/dataset/zeus/zhaoy/.cache/huggingface/hub/datasets--lmms-lab--Video-MME/snapshots/ead1408f75b618502df9a1d8e0950166bf0a2a0b",
     "frames_root": "",
     "videos_root": "$ROOT/video",
-    "dataset_info_path": "$ROOT/videomme_sample0p2.json",
+    "dataset_info_path": "$ROOT/videomme.json",
     "media_root": "$ROOT/video",
     "tools": "crop_video",
     "mode": "tool"
@@ -24,7 +24,7 @@
     "root": "/mnt/tidal-alsh01/dataset/zeus/zhaoy/.cache/huggingface/hub/datasets--longvideobench--LongVideoBench/snapshots/60d1c89c1919a198b73be39c2babb213b29d6a5c",
     "frames_root": "",
     "videos_root": "$ROOT/videos",
-    "dataset_info_path": "$ROOT/LongVideoBench_converted_sample0p3.json",
+    "dataset_info_path": "$ROOT/LongVideoBench_converted.json",
     "media_root": "$ROOT/videos",
     "tools": "crop_video",
     "mode": "tool"
@@ -34,7 +34,7 @@
     "root": "/mnt/tidal-alsh01/dataset/zeus/zhaoy/.cache/huggingface/hub/VideoSIAH-Eval",
     "frames_root": "",
     "videos_root": "$ROOT/videos",
-    "dataset_info_path": "$ROOT/data/test-00000-of-00001_sample0p5.json",
+    "dataset_info_path": "$ROOT/data/test-00000-of-00001.json",
     "media_root": "$ROOT/videos",
     "tools": "crop_video",
     "mode": "tool"
