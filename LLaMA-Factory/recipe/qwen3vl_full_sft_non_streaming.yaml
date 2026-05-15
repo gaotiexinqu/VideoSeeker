@@ -1,0 +1,56 @@
+### model
+model_name_or_path: Qwen/Qwen3-VL-8B-Instruct
+image_max_pixels: 112896  # 512*512
+video_max_pixels: 112896  # 512*512
+video_fps: 1.0
+video_maxlen: 128
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+freeze_language_model: false
+deepspeed: /mnt/tidal-alsh01/dataset/zeus/zhaoy/Thinking_V2P_Videos/LlamaFactory/examples/deepspeed/ds_z2_config.json
+
+### dataset
+
+dataset: [dataset]
+dataset_dir: [dataset_dir]
+media_dir: [media_dir]
+template: qwen3_vl
+cutoff_len: 16384
+# max_samples: 1000000  # unavailable in streaming mode
+overwrite_cache: true
+preprocessing_num_workers: 32
+dataloader_num_workers: 4  # set to 0 to avoid "Resource temporarily unavailable" from multi-process video decoding
+
+### output
+output_dir: [output_dir]
+logging_steps: 1
+save_steps: 50000
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 2
+learning_rate: 1.0e-5
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+accelerator_config:
+  dispatch_batches: false
+resume_from_checkpoint: null
+
+### eval
+# val_size: 0.1
+# per_device_eval_batch_size: 1
+# eval_strategy: steps
+# eval_steps: 500

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "Video Tools MCP Server": {
+      "command": "/mnt/tidal-alsh01/dataset/zeus/zhaoy/envs/verl/bin/python3",
+      "args": ["/mnt/tidal-alsh01/dataset/zeus/zhaoy/Thinking_V2P_Videos/verl/examples_longvt/video_tools/mcp_server.py"]
+    }
+  }
+}
