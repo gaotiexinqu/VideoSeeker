@@ -1,4 +1,4 @@
-# VideoSeeker
+# VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation
 
 <p align="center">
   <a href="https://img.shields.io/badge/License-Apache%202.0-green.svg">
