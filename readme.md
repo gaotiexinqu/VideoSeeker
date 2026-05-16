@@ -1,15 +1,20 @@
 # VideoSeeker
 
 <p align="center">
-  <a href="https://img.shields.io/badge/python-3.12-blue.svg">
-    <img src="https://img.shields.io/badge/python-3.12-blue.svg" alt="Python">
+  <a href="https://img.shields.io/badge/License-Apache%202.0-green.svg">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-green.svg" alt="License">
   </a>
-  <a href="https://img.shields.io/badge/license-Apache%202.0-green.svg">
-    <img src="https://img.shields.io/badge/license-Apache%202.0-green.svg" alt="License">
+  <a href="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=FFD43B">
+    <img src="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=FFD43B" alt="Python">
+  </a>
+  <a href="https://img.shields.io/badge/Cite-VideoSeeker-orange?logo=readme&logoColor=white">
+    <img src="https://img.shields.io/badge/Cite-VideoSeeker-orange?logo=readme&logoColor=white" alt="Citation">
   </a>
 </p>
 
-VideoSeeker is a novel agentic instance-level video understanding paradigm via native tool invocation with visual prompts.
+<font size=7><div align='center' > [[🌐 Homepage](https://gaotiexinqu.github.io/VideoSeeker/)] [[📖 arXiv Paper]()] [[📊 Code](https://github.com/gaotiexinqu/VideoSeeker)]  </div></font>
+
+> VideoSeeker is a novel agentic instance-level video understanding paradigm via native tool invocation with visual prompts.
 
 ## News
 
