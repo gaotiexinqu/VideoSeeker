@@ -16,7 +16,7 @@
 
 > VideoSeeker is a novel agentic instance-level video understanding paradigm via native tool invocation with visual prompts.
 
-## News
+## 🔥 News
 
 * **[2026/05/14]** 🔥 We have released `VideoSeeker`, a novel agentic instance-level video understanding paradigm via visual prompts.
 
@@ -37,9 +37,9 @@
     <img src="./assets/bench.png" width="100%" height="100%">
 </p>
 
-# Quickstart
+# 🚀 Quickstart
 
-## Environmental Setup
+## 🔧 Environmental Setup
 
 ### SFT
 ```
@@ -59,7 +59,7 @@ cd VideoSeeker/verl/verl
 bash scripts/install.sh
 ```
 
-## Prepare Dataset
+## 🛠️ Prepare Dataset
 
 ### SFT
 
@@ -67,13 +67,13 @@ bash scripts/install.sh
 
 ### Eval
 
-## Start Training
+## ⚡ Start Training
 
 ### SFT
 
 ### RL
 
-## Evaluation
+## 📊 Evaluation
 
 We support multi-benchmark parallel inference and evaluation on various video understanding benchmarks.
 
@@ -118,7 +118,7 @@ bash eval/calu_metrics/start_all_eval.sh
 bash eval/calu_metrics/longvt/start_judge.sh
 ```
 
-## Citation
+## 📜 Citation
 
 ```
 @article{zhao2026videoseeker,
