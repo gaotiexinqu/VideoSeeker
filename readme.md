@@ -7,7 +7,7 @@
   <a href="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=FFD43B">
     <img src="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=FFD43B" alt="Python">
   </a>
-  <a href="#-citation">
+  <a href="https://github.com/gaotiexinqu/VideoSeeker#citation">
     <img src="https://img.shields.io/badge/Cite-VideoSeeker-orange?logo=readme&logoColor=white" alt="Citation">
   </a>
 </p>
