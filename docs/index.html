@@ -1,580 +1,520 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Flow-OPD</title>
-    <meta
-      name="description"
-      content="Flow-OPD: On-Policy Distillation for Generalist Flow Matching Text-to-Image Generation."
-    />
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Primary Meta Tags -->
+  <!-- TODO: Replace with your paper title and author names -->
+  <meta name="title" content="PAPER_TITLE - AUTHOR_NAMES">
+  <!-- TODO: Write a compelling 150-160 character description of your research -->
+  <meta name="description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+  <!-- TODO: Add 5-10 relevant keywords for your research area -->
+  <meta name="keywords" content="KEYWORD1, KEYWORD2, KEYWORD3, machine learning, computer vision, AI">
+  <!-- TODO: List all authors -->
+  <meta name="author" content="FIRST_AUTHOR_NAME, SECOND_AUTHOR_NAME">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <!-- TODO: Replace with your institution or lab name -->
+  <meta property="og:site_name" content="INSTITUTION_OR_LAB_NAME">
+  <!-- TODO: Same as paper title above -->
+  <meta property="og:title" content="PAPER_TITLE">
+  <!-- TODO: Same as description above -->
+  <meta property="og:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+  <!-- TODO: Replace with your actual website URL -->
+  <meta property="og:url" content="https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE">
+  <!-- TODO: Create a 1200x630px preview image and update path -->
+  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="PAPER_TITLE - Research Preview">
+  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
+  <meta property="article:author" content="FIRST_AUTHOR_NAME">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="KEYWORD1">
+  <meta property="article:tag" content="KEYWORD2">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/institution Twitter handle -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's Twitter handle -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <!-- TODO: Same as paper title above -->
+  <meta name="twitter:title" content="PAPER_TITLE">
+  <!-- TODO: Same as description above -->
+  <meta name="twitter:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
+  <!-- TODO: Same as social preview image above -->
+  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="PAPER_TITLE - Research Preview">
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="PAPER_TITLE">
+  <meta name="citation_author" content="FIRST_AUTHOR_LAST, FIRST_AUTHOR_FIRST">
+  <meta name="citation_author" content="SECOND_AUTHOR_LAST, SECOND_AUTHOR_FIRST">
+  <meta name="citation_publication_date" content="2024">
+  <meta name="citation_conference_title" content="CONFERENCE_NAME">
+  <meta name="citation_pdf_url" content="https://YOUR_DOMAIN.com/static/pdfs/paper.pdf">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Flow-OPD: On-Policy Distillation for Flow Matching Models" />
-    <meta property="og:description" content="Replacing sparse scalar rewards with dense, trajectory-level, multi-teacher vector field supervision." />
 
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Flow-OPD" />
-    <meta name="twitter:description" content="On-Policy Distillation for Generalist Flow Matching Text-to-Image Generation." />
+  <!-- TODO: Replace with your paper title and authors -->
+  <title>PAPER_TITLE - AUTHOR_NAMES | Academic Research</title>
+  
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "PAPER_TITLE",
+    "description": "BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "FIRST_AUTHOR_NAME",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "INSTITUTION_NAME"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "SECOND_AUTHOR_NAME",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "INSTITUTION_NAME"
+        }
+      }
+    ],
+    "datePublished": "2024-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "CONFERENCE_OR_JOURNAL_NAME"
+    },
+    "url": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE",
+    "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
+    "keywords": ["KEYWORD1", "KEYWORD2", "KEYWORD3", "machine learning", "computer vision"],
+    "abstract": "FULL_ABSTRACT_TEXT_HERE",
+    "citation": "BIBTEX_CITATION_HERE",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "mainEntity": {
+      "@type": "WebPage",
+      "@id": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "RESEARCH_AREA_1"
+      },
+      {
+        "@type": "Thing", 
+        "name": "RESEARCH_AREA_2"
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "INSTITUTION_OR_LAB_NAME",
+    "url": "https://YOUR_INSTITUTION_WEBSITE.com",
+    "logo": "https://YOUR_DOMAIN.com/static/images/favicon.ico",
+    "sameAs": [
+      "https://twitter.com/YOUR_TWITTER_HANDLE",
+      "https://github.com/YOUR_GITHUB_USERNAME"
+    ]
+  }
+  </script>
+</head>
+<body>
 
-    <link rel="stylesheet" href="styles.css" />
-    <style>
-      /* ===== Override vars for Flow-OPD palette ===== */
-      :root {
-        --purple: #7C3AED;
-        --purple-soft: #F3EFFF;
-        --purple-accent: #5B21B6;
-        --purple-mid: #A78BFA;
-        --shadow: 0 16px 40px rgba(124, 58, 237, 0.10);
-      }
 
-      /* ===== Pipeline Diagram ===== */
-      .pipeline-diagram {
-        display: flex;
-        align-items: stretch;
-        gap: 0;
-        margin: 24px 0 0;
-        overflow-x: auto;
-        padding-bottom: 6px;
-      }
-      .pipeline-step {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 130px;
-        flex: 1;
-      }
-      .pipeline-node {
-        background: var(--paper);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 12px 14px;
-        text-align: center;
-        width: 100%;
-        margin-bottom: 6px;
-        font-size: 13px;
-        font-weight: 600;
-      }
-      .pipeline-node.p-base { border-color: #d1d5db; color: #6b7280; }
-      .pipeline-node.p-s1 { border-color: #ddd6fe; color: var(--purple); background: var(--purple-soft); }
-      .pipeline-node.p-s2 { border-color: #a5f3fc; color: #0891b2; background: #ecfeff; }
-      .pipeline-node.p-out { border-color: #fde68a; color: #b45309; background: #fffbeb; }
-      .pipeline-node.p-teacher {
-        border-color: #bbf7d0; color: #047857; background: #ecfdf5;
-        font-size: 12px; padding: 6px 10px; margin-bottom: 3px;
-      }
-      .pipeline-label { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-      .pipeline-teacher-col { display: flex; flex-direction: column; gap: 3px; width: 100%; }
-      .pipeline-arrow { display: flex; align-items: center; padding: 0 6px; color: #d1d5db; font-size: 1.3rem; flex-shrink: 0; }
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
 
-      /* ===== Results Cards ===== */
-      .result-card.wide { grid-column: 1 / -1; }
-      .result-card { border: 1px solid var(--line); border-radius: 12px; padding: 20px; background: var(--soft); }
-      .result-card h3 { margin: 0 0 12px; font-size: 16px; }
-      .result-card p { margin: 0; color: var(--muted); font-size: 13px; }
-
-      /* ===== Image placeholder ===== */
-      .img-placeholder {
-        background: var(--soft);
-        border: 2px dashed var(--line);
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 220px;
-        text-align: center;
-        padding: 32px;
-        position: relative;
-        overflow: hidden;
-        margin: 20px 0;
-      }
-      .img-placeholder::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: repeating-linear-gradient(
-          -45deg, transparent, transparent 12px,
-          rgba(223, 227, 232, 0.5) 12px, rgba(223, 227, 232, 0.5) 13px
-        );
-      }
-      .img-placeholder-inner { position: relative; z-index: 1; }
-      .img-placeholder .ip-icon { font-size: 2.2rem; margin-bottom: 10px; opacity: 0.35; }
-      .img-placeholder .ip-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
-      .img-placeholder .ip-sub { font-size: 12px; color: var(--muted); max-width: 360px; line-height: 1.6; }
-
-      /* ===== Contributor Cards ===== */
-      .contrib-grid article { border: 1px solid var(--line); border-radius: 12px; padding: 20px; background: var(--soft); }
-      .contrib-grid h3 { margin: 0 0 10px; font-size: 15px; }
-      .contrib-grid p { margin: 0; color: var(--muted); font-size: 13px; }
-
-      /* ===== Key Stats Banner ===== */
-      .key-stats {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-        margin: 24px 0;
-      }
-      .key-stat {
-        flex: 1;
-        min-width: 140px;
-        background: var(--purple-soft);
-        border: 1px solid #ddd6fe;
-        border-radius: 12px;
-        padding: 18px 20px;
-        text-align: center;
-      }
-      .key-stat .ks-val {
-        font-size: 28px;
-        font-weight: 800;
-        color: var(--purple);
-        line-height: 1;
-      }
-      .key-stat .ks-label {
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 6px;
-        font-weight: 600;
-      }
-
-      /* ===== Citation block ===== */
-      .citation-block {
-        background: var(--soft);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 20px 24px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
-        color: var(--muted);
-        overflow-x: auto;
-        white-space: pre-wrap;
-        word-break: break-all;
-        line-height: 1.8;
-      }
-
-      /* ===== Teaser Image ===== */
-      .teaser-img {
-        background: var(--soft);
-        border: 2px dashed var(--line);
-        border-radius: 16px;
-        min-height: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-      }
-      .teaser-img::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: repeating-linear-gradient(
-          -45deg, transparent, transparent 12px,
-          rgba(223, 227, 232, 0.5) 12px, rgba(223, 227, 232, 0.5) 13px
-        );
-      }
-      .teaser-img-inner {
-        position: relative;
-        z-index: 1;
-        text-align: center;
-        padding: 32px;
-      }
-      .teaser-icon { font-size: 3rem; margin-bottom: 14px; opacity: 0.3; }
-      .teaser-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
-      .teaser-sub { font-size: 12px; color: var(--muted); line-height: 1.7; max-width: 400px; margin: 0 auto; }
-
-      /* ===== Formula Block ===== */
-      .formula-block {
-        margin-top: 32px;
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 24px;
-        background: var(--soft);
-      }
-      .formula-block h3 { margin: 0 0 20px; }
-      .formula-item {
-        margin-bottom: 28px;
-        padding-bottom: 28px;
-        border-bottom: 1px solid var(--line);
-      }
-      .formula-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-      .formula-label { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-      .formula {
-        background: var(--paper);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 14px 18px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 13px;
-        color: var(--ink);
-        overflow-x: auto;
-        margin-bottom: 10px;
-        line-height: 1.8;
-      }
-      .formula-caption { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; }
-
-      /* ===== Keywords ===== */
-      .keywords {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-bottom: 16px;
-        flex-wrap: wrap;
-      }
-      .kw-badge {
-        background: var(--purple-soft);
-        color: var(--purple);
-        border: 1px solid #ddd6fe;
-        border-radius: 20px;
-        padding: 4px 16px;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
-
-      /* ===== Responsive ===== */
-      @media (max-width: 680px) {
-        .pipeline-diagram { flex-direction: column; }
-        .pipeline-arrow { transform: rotate(90deg); padding: 4px 0; justify-content: center; }
-        .results-grid { grid-template-columns: 1fr !important; }
-        .key-stats { flex-direction: column; }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="topbar">
-      <a class="brand" href="#top">Flow-OPD</a>
-      <nav aria-label="Primary navigation">
-        <a href="#abstract">Abstract</a>
-        <a href="#method">Method</a>
-        <a href="#results">Results</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#bibtex">BibTeX</a>
-      </nav>
-    </header>
-
-    <main id="top">
-      <!-- ===== HERO ===== -->
-      <section class="hero paper-width">
-        <div class="keywords">
-          <span class="kw-badge">T2I</span>
-          <span class="kw-badge">OPD</span>
-        </div>
-        <h1><span class="title-rest">Flow-OPD: On-Policy Distillation for Flow Matching Models</span></h1>
-        <p class="subtitle">
-          To our best knowledge, we present the first integration of On-Policy Distillation into Flow Matching models, achieving exceptional multi-task performance across diverse generative domains.
-        </p>
-
-        <div class="authors" aria-label="Authors">
-          <span><a href="https://costaliya.github.io/" target="_blank">Zhen Fang</a><sup>1*</sup></span>
-          <span>Wenxuan Huang<sup>*&#8224&#8225;</sup></span>
-          <span>Yu Zeng<sup>1</sup></span>
-          <span>Yiming Zhao<sup>1</sup></span>
-          <span>Shuang Chen<sup>2</sup></span>
-          <span>Kaituo Feng<sup>3</sup></span>
-          <span>Yunlong Lin<sup>3</sup></span>
-          <span>Lin Chen<sup>1</sup></span>
-          <span>Zehui Chen<sup>1</sup></span>
-          <span>Shaosheng Cao<sup>4&#8225;</sup></span>
-          <span>Feng Zhao<sup>1</sup></span>
-        </div>
-
-        <div class="affiliations">
-          <p><sup>1</sup>University of Science and Technology of China (USTC) &nbsp;&middot;&nbsp; <sup>2</sup>UCLA &nbsp;&middot;&nbsp; <sup>3</sup>CUHK &nbsp;&middot;&nbsp; <sup>4</sup>Xiaohongshu</p>
-          <p><sup>*</sup>Equal Contribution &nbsp;&middot;&nbsp; <sup>&#8224;</sup>Project Leader &nbsp;&middot;&nbsp; <sup>&#8225;</sup>Corresponding Author</p>
-        </div>
-
-        <div class="actions">
-          <a class="button primary" href="https://github.com/CostaliyA/Flow-OPD/blob/main/flow-opd.pdf" target="_blank">Paper</a>
-          <a class="button" href="https://github.com/CostaliyA/Flow-OPD" target="_blank">&lt;/&gt; Code</a>
-          <a class="button" href="https://huggingface.co/CostaliyA/Flow-OPD" target="_blank">Model</a>
-        </div>
-      </section>
-
-      <!-- ===== TEASER IMAGE ===== -->
-      <div class="paper-width" style="margin: 0 auto 32px; padding: 0 24px;">
-        <img src="teaser.png" alt="Flow-OPD Teaser" style="width:100%;border-radius:16px;display:block;" />
+  <!-- More Works Dropdown -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
+      <i class="fas fa-flask"></i>
+      More Works
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Works from Our Lab</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
+      <div class="works-list">
+        <!-- TODO: Replace with your lab's related works -->
+        <a href="https://arxiv.org/abs/PAPER_ID_1" class="work-item" target="_blank">
+          <div class="work-info">
+            <!-- TODO: Replace with actual paper title -->
+            <h5>Paper Title 1</h5>
+            <!-- TODO: Replace with brief description -->
+            <p>Brief description of the work and its main contribution.</p>
+            <!-- TODO: Replace with venue and year -->
+            <span class="work-venue">Conference/Journal 2024</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <!-- TODO: Add more related works or remove extra items -->
+        <a href="https://arxiv.org/abs/PAPER_ID_2" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Paper Title 2</h5>
+            <p>Brief description of the work and its main contribution.</p>
+            <span class="work-venue">Conference/Journal 2023</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://arxiv.org/abs/PAPER_ID_3" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Paper Title 3</h5>
+            <p>Brief description of the work and its main contribution.</p>
+            <span class="work-venue">Conference/Journal 2023</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 
-      <!-- ===== KEY STATS ===== -->
-      <section class="section paper-width" id="abstract">
-        <div class="key-stats">
-          <div class="key-stat">
-            <div class="ks-val">+18pt</div>
-            <div class="ks-label">Avg. improvement vs. base</div>
-          </div>
-          <div class="key-stat">
-            <div class="ks-val">+8pt</div>
-            <div class="ks-label">vs. GRPO-Mix (best baseline)</div>
-          </div>
-          <div class="key-stat">
-            <div class="ks-val">0.92</div>
-            <div class="ks-label">GenEval (base: 0.63)</div>
-          </div>
-          <div class="key-stat">
-            <div class="ks-val">0.94</div>
-            <div class="ks-label">OCR accuracy (base: 0.59)</div>
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <!-- TODO: Replace with your paper title -->
+            <h1 class="title is-1 publication-title">Academic Project Page</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with your paper authors and their personal links -->
+              <span class="author-block">
+                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">First Author</a><sup>*</sup>,</span>
+                <span class="author-block">
+                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Second Author</a><sup>*</sup>,</span>
+                  <span class="author-block">
+                    <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Third Author</a>
+                  </span>
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <!-- TODO: Replace with your institution and conference/journal info -->
+                    <span class="author-block">Institution Name<br>Conference name and year</span>
+                    <!-- TODO: Remove this line if no equal contribution -->
+                    <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
+                  </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- TODO: Update with your arXiv paper ID -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+                    <!-- TODO: Add your supplementary material PDF or remove this section -->
+                    <span class="link-block">
+                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Supplementary</span>
+                    </a>
+                  </span>
+
+                  <!-- TODO: Replace with your GitHub repository URL -->
+                  <span class="link-block">
+                    <a href="https://github.com/YOUR REPO HERE" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- TODO: Update with your arXiv paper ID -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <h2>Abstract</h2>
-        <p>
-          We identify two critical bottlenecks in multi-task Flow Matching training: <strong>reward sparsity</strong>
-          and <strong>gradient interference</strong>. Standard GRPO works in single-task settings but catastrophically
-          degrades in multi-task settings due to divergent gradients compressing high-dimensional image space into
-          a single scalar reward. Flow-OPD integrates On-Policy Distillation into the Flow Matching pipeline,
-          replacing sparse scalar rewards with dense, trajectory-level, multi-teacher vector field supervision.
-          Evaluated on SD-3.5-Medium, Flow-OPD achieves <strong>+18pt average improvement</strong> over vanilla GRPO
-          and surpasses individual teacher models on OCR and DeQA.
-        </p>
-      </section>
 
-      <!-- ===== METHOD ===== -->
-      <section class="section paper-width" id="method">
-        <h2>Method</h2>
-        <p>
-          Flow-OPD decouples expertise acquisition from model unification through a two-stage process:
-          <strong>Cold Start</strong> initialization followed by <strong>Multi-Teacher On-Policy Distillation</strong>.
-        </p>
+<!-- Teaser video-->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!-- TODO: Replace with your teaser video -->
+      <video poster="" id="tree" autoplay controls muted loop height="100%" preload="metadata">
+        <!-- TODO: Add your video file path here -->
+        <source src="static/videos/banner_video.mp4" type="video/mp4">
+      </video>
+      <!-- TODO: Replace with your video description -->
+      <h2 class="subtitle has-text-centered">
+        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
 
-        <!-- Pipeline -->
-        <div class="pipeline-diagram">
-          <div class="pipeline-step">
-            <div class="pipeline-label">Base Model</div>
-            <div class="pipeline-node p-base">SD-3.5-M</div>
-          </div>
-          <div class="pipeline-arrow">&#8594;</div>
-          <div class="pipeline-step">
-            <div class="pipeline-label">Stage 1</div>
-            <div class="pipeline-node p-s1">Cold Start</div>
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">SFT or Merge</div>
-          </div>
-          <div class="pipeline-arrow">&#8594;</div>
-          <div class="pipeline-step">
-            <div class="pipeline-label">Stage 2</div>
-            <div class="pipeline-node p-s2">Student &#9679;&#9679;&#9679;</div>
-            <div class="pipeline-label" style="margin-top:6px;">Teachers</div>
-            <div class="pipeline-teacher-col">
-              <div class="pipeline-node p-teacher">GenEval</div>
-              <div class="pipeline-node p-teacher">OCR</div>
-              <div class="pipeline-node p-teacher">DeQA</div>
-              <div class="pipeline-node p-teacher">PickScore</div>
-            </div>
-          </div>
-          <div class="pipeline-arrow">&#8594;</div>
-          <div class="pipeline-step">
-            <div class="pipeline-label">Output</div>
-            <div class="pipeline-node p-out">Unified Student</div>
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <!-- TODO: Replace with your paper abstract -->
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper tellus sed ante aliquam tempus. Etiam porttitor urna feugiat nibh elementum, et tempor dolor mattis. Donec accumsan enim augue, a vulputate nisi sodales sit amet. Proin bibendum ex eget mauris cursus euismod nec et nibh. Maecenas ac gravida ante, nec cursus dui. Vivamus purus nibh, placerat ac purus eget, sagittis vestibulum metus. Sed vestibulum bibendum lectus gravida commodo. Pellentesque auctor leo vitae sagittis suscipit.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+       <div class="item">
+        <!-- TODO: Replace with your research result images -->
+        <img src="static/images/carousel1.jpg" alt="First research result visualization" loading="lazy"/>
+        <!-- TODO: Replace with description of this result -->
+        <h2 class="subtitle has-text-centered">
+          First image description.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/carousel2.jpg" alt="Second research result visualization" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+          Second image description.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/carousel3.jpg" alt="Third research result visualization" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+         Third image description.
+       </h2>
+     </div>
+     <div class="item">
+      <!-- Your image here -->
+      <img src="static/images/carousel4.jpg" alt="Fourth research result visualization" loading="lazy"/>
+      <h2 class="subtitle has-text-centered">
+        Fourth image description.
+      </h2>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+
+
+
+<!-- Youtube video -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <!-- Paper video. -->
+      <h2 class="title is-3">Video Presentation</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <div class="publication-video">
+            <!-- TODO: Replace with your YouTube video ID -->
+            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End youtube video -->
 
-        <div class="contrib-grid">
-          <article>
-            <h3>Cold Start Initialization</h3>
-            <p>
-              <strong>SFT-based</strong>: fine-tune student on teacher trajectories for stable starting point.
-              <strong>Model Merging</strong>: superpose anisotropic teacher priors without training cost,
-              consistently outperforming SFT across all OOD benchmarks.
-            </p>
-          </article>
-          <article>
-            <h3>On-Policy Sampling (SDE)</h3>
-            <p>
-              Convert the deterministic ODE into a Stochastic Differential Equation (SDE) for stochastic exploration.
-              Sample <em>G</em> trajectories per prompt to generate on-policy marginal distributions.
-            </p>
-          </article>
-          <article>
-            <h3>Multi-Teacher Dense Labeling</h3>
-            <p>
-              Each teacher acts as a Generative Reward Model (GRM), returning a full vector field
-              <code>v<sub>&#x03D5;k</sub></code>. Dynamic routing <code>&#x03B1;<sub>k</sub></code> selects
-              domain experts from GenEval, OCR, DeQA and PickScore.
-            </p>
-          </article>
-          <article>
-            <h3>MAR: Manifold Anchor Regularization</h3>
-            <p>
-              A task-agnostic aesthetic teacher prevents background mode collapse and semantic redundancy.
-              KL regularization from the aesthetic teacher acts as a continuous elastic anchor, decoupling
-              functional alignment from stylistic preservation.
-            </p>
-          </article>
+
+<!-- Video carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Another Carousel</h2>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-video1">
+          <!-- TODO: Add poster image for better preview -->
+          <video poster="" id="video1" controls muted loop height="100%" preload="metadata">
+            <!-- Your video file here -->
+            <source src="static/videos/carousel1.mp4" type="video/mp4">
+          </video>
         </div>
-
-        <!-- ===== KEY FORMULAS ===== -->
-        <div class="formula-block">
-          <h3>Core Formulations</h3>
-
-          <div class="formula-item">
-            <div class="formula-label">On-Policy Sampling (SDE)</div>
-            <div class="formula">
-              dx<sub>t</sub> = [ v<sub>&#x03B8;</sub>(x<sub>t</sub>, t) + (&#x03C3;<sub>t</sub><sup>2</sup>/2t) &#x22C5; (x<sub>t</sub> + (1&#x2212;t)v<sub>&#x03B8;</sub>(x<sub>t</sub>, t)) ] dt + &#x03C3;<sub>t</sub> dw
-            </div>
-            <p class="formula-caption">Converting the deterministic ODE into an SDE for stochastic on-policy exploration. Sampling G trajectories per prompt generates marginal distribution x<sub>t</sub> &#x223C; &#x03C1;<sub>t</sub><sup>&#x03B8;</sup>(&#x22B5; | c).</p>
-          </div>
-
-          <div class="formula-item">
-            <div class="formula-label">Task-Specific Teacher Routing</div>
-            <div class="formula">
-              v<sub>target</sub>(x<sub>t</sub>, t, c) = v<sub>&#x03D5;<sub>k</sub></sub>(x<sub>t</sub>, t, c) &#x2203; c &#x2208; &#x1D34;<sub>k</sub>
-            </div>
-            <p class="formula-caption">Each task &#x1D34;<sub>k</sub> has a dedicated domain expert teacher &#x03D5;<sub>k</sub>. Data belonging to task k is routed exclusively to its corresponding teacher, providing dense supervision without gradient interference across domains.</p>
-          </div>
-
-          <div class="formula-item">
-            <div class="formula-label">Dense KL Reward</div>
-            <div class="formula">
-              D<sub>KL</sub>(&#x03C0;<sub>&#x03B8;</sub> &#x2016; &#x03C0;<sub>target</sub>) = &#x0394;t/2 &#x22C5; (&#x03C3;<sub>t</sub>(1&#x2212;t)/2t + 1/&#x03C3;<sub>t</sub>)<sup>2</sup> &#x22C5; &#x2016;v<sub>&#x03B8;</sub> &#x2212; v<sub>target</sub>&#x2016;<sup>2</sup>
-            </div>
-            <p class="formula-caption">Reverse KL divergence in the SDE framework reduces to a time-weighted L<sub>2</sub> distance between student and teacher vector fields.</p>
-          </div>
-
-          <div class="formula-item">
-            <div class="formula-label">PPO-Clipped Policy Update</div>
-            <div class="formula">
-              J(&#x03B8;) &#x2248; 1/(B&#x22C5;G) &#x2211; min(&#x03C1;<sub>t,i,j</sub>(&#x03B8;)&#x22C5;r<sub>t,i,j</sub><sup>OPD</sup>, clip(&#x03C1;, 1&#x2212;&#x03B5;, 1+&#x03B5;)&#x22C5;r<sub>t,i,j</sub><sup>OPD</sup>)
-            </div>
-            <p class="formula-caption">Clipped surrogate objective bounds the policy trust region. Gradients flow exclusively through the policy ratio &#x03C1;, preserving fine-grained credit assignment.</p>
-          </div>
-
-          <div class="formula-item">
-            <div class="formula-label">Total Training Loss (with MAR)</div>
-            <div class="formula">
-              L<sub>Total</sub>(&#x03B8;) = L<sub>Policy</sub>(&#x03B8;) + &#x03BB; &#x220E;<sub>c,t,x<sub>t</sub>&#x223C;&#x03C1;<sub>t</sub><sup>&#x03B8;</sup></sub> [ w(t) &#x22C5; &#x2016;v<sub>&#x03B8;</sub> &#x2212; v<sub>aesthetic</sub>&#x2016;<sup>2</sup> ]
-            </div>
-            <p class="formula-caption">MAR introduces KL regularization from a frozen aesthetic teacher as a continuous elastic anchor, preventing aesthetic degradation while absorbing functional intelligence.</p>
-          </div>
+        <div class="item item-video2">
+          <!-- TODO: Add poster image for better preview -->
+          <video poster="" id="video2" controls muted loop height="100%" preload="metadata">
+            <!-- Your video file here -->
+            <source src="static/videos/carousel2.mp4" type="video/mp4">
+          </video>
         </div>
-      </section>
-
-      <!-- ===== RESULTS ===== -->
-      <section class="section paper-width" id="results">
-        <h2>Main Results</h2>
-        <p class="note">
-          Evaluated on SD-3.5-Medium across GenEval, OCR, DeQA, and PickScore.
-          Training on 4&#215;8 H800 GPUs (~50 hours).
-        </p>
-
-        <div class="results-grid">
-          <!-- Overall table -->
-          <article class="result-card wide">
-            <h3>Overall Performance &mdash; Multi-Task Alignment on SD-3.5-M</h3>
-            <div class="table-scroll">
-              <table class="results-table category-table">
-                <thead>
-                  <tr><th>Model</th><th>GenEval &#8593;</th><th>OCR Acc. &#8593;</th><th>DeQA &#8593;</th><th>PickScore &#8593;</th><th>Average &#8593;</th></tr>
-                </thead>
-                <tbody>
-                  <tr style="color: var(--muted);"><td>SD-3.5-M (base)</td><td>0.63</td><td>0.59</td><td>4.07</td><td>21.64</td><td>0.72</td></tr>
-                  <tr><td>+ GRPO-GenEval</td><td>0.94</td><td>0.65</td><td>4.01</td><td>21.53</td><td>0.81</td></tr>
-                  <tr><td>+ GRPO-OCR</td><td>0.64</td><td>0.92</td><td>4.06</td><td>21.69</td><td>0.80</td></tr>
-                  <tr><td>+ GRPO-DeQA</td><td>0.64</td><td>0.66</td><td>4.23</td><td>23.02</td><td>0.76</td></tr>
-                  <tr><td>+ GRPO-PickScore</td><td>0.51</td><td>0.69</td><td>4.22</td><td>23.19</td><td>0.73</td></tr>
-                  <tr><td>GRPO-Mix (3:1:1)</td><td>0.73</td><td>0.83</td><td>4.33</td><td>21.84</td><td>0.82</td></tr>
-                  <tr><td>Ours &mdash; SFT Init</td><td>0.91</td><td>0.92</td><td>4.29</td><td>21.83</td><td>0.88</td></tr>
-                  <tr class="highlight"><td><strong>Ours &mdash; Merge Init</strong></td><td><strong>0.92</strong></td><td><strong>0.94</strong></td><td><strong>4.35</strong></td><td><strong>23.08</strong></td><td><strong>0.90</strong></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </article>
-
-          <!-- Cold Start ablation -->
-          <article class="result-card">
-            <h3>Cold Start Ablation</h3>
-            <p>T2I-CompBench (OOD Generalization). Model Merging optimally leverages homogeneous teacher priors without additional training cost.</p>
-            <div class="table-scroll" style="margin-top: 12px;">
-              <table class="results-table metric-table">
-                <thead>
-                  <tr><th>Model</th><th>Color</th><th>Shape</th><th>3D-Spatial</th><th>Numeracy</th><th>Overall</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>GRPO-Mix</td><td>0.692</td><td>0.611</td><td>0.422</td><td>0.641</td><td>0.587</td></tr>
-                  <tr><td>Cold Start (w/o OPD)</td><td>0.710</td><td>0.613</td><td>0.425</td><td>0.646</td><td>0.595</td></tr>
-                  <tr class="highlight"><td><strong>Flow-OPD (Merge Init)</strong></td><td><strong>0.719</strong></td><td><strong>0.629</strong></td><td><strong>0.457</strong></td><td><strong>0.684</strong></td><td><strong>0.618</strong></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </article>
-
-          <!-- MAR ablation -->
-          <article class="result-card">
-            <h3>MAR Ablation</h3>
-            <p>MAR prevents reward hacking by anchoring optimization to a task-agnostic aesthetic manifold.</p>
-            <div class="table-scroll" style="margin-top: 12px;">
-              <table class="results-table metric-table">
-                <thead>
-                  <tr><th>Model</th><th>ImageReward &#8593;</th><th>Aesthetic &#8593;</th><th>HPS-v2.1 &#8593;</th><th>QwenVL &#8593;</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>SD-3.5-M (base)</td><td>1.02</td><td>5.87</td><td>0.298</td><td>3.45</td></tr>
-                  <tr><td>GRPO-Mix</td><td>1.23</td><td>5.93</td><td>0.310</td><td>3.88</td></tr>
-                  <tr><td>Flow-OPD w/o MAR</td><td>1.26</td><td>5.89</td><td>0.300</td><td>3.82</td></tr>
-                  <tr class="highlight"><td><strong>Flow-OPD (w/ MAR)</strong></td><td><strong>1.36</strong></td><td><strong>6.23</strong></td><td><strong>0.330</strong></td><td><strong>4.05</strong></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </article>
+        <div class="item item-video3">
+          <!-- TODO: Add poster image for better preview -->
+          <video poster="" id="video3" controls muted loop height="100%" preload="metadata">
+            <!-- Your video file here -->
+            <source src="static/videos/carousel3.mp4" type="video/mp4">
+          </video>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End video carousel -->
 
-        <!-- ===== SUBJECTIVE IMAGE #1 ===== -->
-        <div style="margin-top: 32px;">
-          <img src="compare.png" alt="Qualitative Results Comparison" style="width:100%;border-radius:12px;" />
+
+
+
+
+
+<!-- Paper poster -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title">Poster</h2>
+
+      <!-- TODO: Replace with your poster PDF -->
+      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
+          </iframe>
+        
+      </div>
+    </div>
+  </section>
+<!--End paper poster -->
+
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{YourPaperKey2024,
+  title={Your Paper Title Here},
+  author={First Author and Second Author and Third Author},
+  journal={Conference/Journal Name},
+  year={2024},
+  url={https://your-domain.com/your-project-page}
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
         </div>
+      </div>
+    </div>
+  </div>
+</footer>
 
-        <!-- ===== SUBJECTIVE IMAGE #2 ===== -->
-        <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
-          <img src="more1.png" alt="More Results 1" style="width:100%;border-radius:12px;" />
-          <img src="more2.png" alt="More Results 2" style="width:100%;border-radius:12px;" />
-          <img src="more3.png" alt="More Results 3" style="width:100%;border-radius:12px;" />
-        </div>
-      </section>
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
 
-      <!-- ===== BIBTEX ===== -->
-      <section class="section paper-width" id="bibtex">
-        <h2>BibTeX</h2>
-        <div class="citation-block">@article{flowopd2026,
-  title   = {Flow-OPD: On-Policy Distillation for Flow Matching Models},
-  author  = {Zhen Fang and Wenxuan Huang and Yu Zeng and Yiming Zhao
-             and Shuang Chen and Kaituo Feng and Yunlong Lin and Jie Liu
-             and Lin Chen and Zehui Chen and Shaosheng Cao and Feng Zhao},
-  year    = {2026}
-}</div>
-        <div style="margin-top: 16px;">
-          <button class="button" onclick="copyCitation()" style="cursor:pointer;">Copy Citation</button>
-        </div>
-      </section>
-    </main>
+    <!-- End of Statcounter Code -->
 
-    <footer class="footer paper-width">
-      <p>Flow-OPD: On-Policy Distillation for Flow Matching Models. &copy; 2026.</p>
-    </footer>
-
-    <script src="script.js"></script>
-    <script>
-      function copyCitation() {
-        const text = `@article{flowopd2026,
-  title   = {Flow-OPD: On-Policy Distillation for Flow Matching Models},
-  author  = {Zhen Fang and Wenxuan Huang and Yu Zeng and Yiming Zhao
-             and Shuang Chen and Kaituo Feng and Yunlong Lin and Jie Liu
-             and Lin Chen and Zehui Chen and Shaosheng Cao and Feng Zhao},
-  year    = {2026}
-}`;
-        navigator.clipboard.writeText(text).then(() => {
-          const btn = event.target.closest('.button');
-          const orig = btn.textContent;
-          btn.textContent = 'Copied!';
-          btn.style.color = 'var(--green)';
-          setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
-        });
-      }
-    </script>
   </body>
-</html>
+  </html>
