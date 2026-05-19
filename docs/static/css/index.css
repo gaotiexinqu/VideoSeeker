@@ -597,6 +597,20 @@ code {
   flex-shrink: 0;
 }
 
+/* Navigation Items in Dropdown */
+.work-item.nav-item {
+  align-items: center;
+}
+
+.work-item.nav-item .fas {
+  color: var(--primary-color);
+  transition: transform 0.2s ease;
+}
+
+.work-item.nav-item:hover .fas {
+  transform: translateX(4px);
+}
+
 
 /* Mobile Responsive Improvements */
 @media screen and (max-width: 768px) {
@@ -732,7 +746,312 @@ a:focus {
 }
 
 
-/* Print styles */
+/* Key Contributions Section */
+.contribution-card {
+  background: var(--background-primary);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  height: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.contribution-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+.contribution-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.contribution-card-primary::before {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+}
+
+.contribution-card-secondary::before {
+  background: linear-gradient(90deg, #06b6d4, #22d3ee);
+}
+
+.contribution-card-accent::before {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.contribution-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  font-size: 1.75rem;
+}
+
+.contribution-card-primary .contribution-icon {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+  color: #6366f1;
+}
+
+.contribution-card-secondary .contribution-icon {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(34, 211, 238, 0.15));
+  color: #06b6d4;
+}
+
+.contribution-card-accent .contribution-icon {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15));
+  color: #f59e0b;
+}
+
+.contribution-card .contribution-title {
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.contribution-card .contribution-title i {
+  display: none;
+}
+
+.contribution-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* Method Section */
+.method-content {
+  background: var(--background-primary);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.method-content h3 {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.method-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.method-content ul li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.method-content ul li::before {
+  content: "▸";
+  color: var(--primary-color);
+  position: absolute;
+  left: 0;
+}
+
+/* Training Steps */
+.training-steps {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.training-step {
+  flex: 1;
+  background: var(--background-secondary);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.training-step:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.step-number {
+  background: var(--primary-color);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.step-content h5 {
+  margin: 0 0 0.25rem 0;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.step-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Results Tables */
+.results-table {
+  background: var(--background-primary);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.results-table table {
+  margin-bottom: 0;
+}
+
+.results-table table th {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  font-weight: 600;
+  text-align: center;
+}
+
+.results-table table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.results-table table tbody tr:hover {
+  background: var(--background-accent) !important;
+}
+
+/* Ablation Studies */
+.ablation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.ablation-item {
+  background: var(--background-primary);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.ablation-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+.ablation-item h3 {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.ablation-item table {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+.ablation-item table th {
+  background: var(--background-accent);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.ablation-item table td {
+  text-align: center;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.ablation-note {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+}
+
+/* Key Findings */
+.finding-item {
+  background: var(--background-primary);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.finding-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+.finding-title {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.finding-title i {
+  color: var(--primary-color);
+}
+
+.finding-item p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .training-steps {
+    flex-direction: column;
+  }
+  
+  .ablation-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contribution-item,
+  .finding-item,
+  .method-content,
+  .results-table,
+  .ablation-item {
+    padding: 1rem;
+  }
+}
 @media print {
   .more-works-container {
     display: none;

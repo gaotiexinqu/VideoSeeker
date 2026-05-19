@@ -14,6 +14,14 @@ function toggleMoreWorks() {
     }
 }
 
+// Close dropdown function for navigation items
+function closeDropdown() {
+    const dropdown = document.getElementById('moreWorksDropdown');
+    const button = document.querySelector('.more-works-btn');
+    dropdown.classList.remove('show');
+    button.classList.remove('active');
+}
+
 // Close dropdown when clicking outside
 document.addEventListener('click', function(event) {
     const container = document.querySelector('.more-works-container');

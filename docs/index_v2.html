@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation">
+  <meta name="description" content="VideoSeeker proposes a novel framework for instance-level video understanding through native agentic tool invocation.">
+  <meta name="keywords" content="video understanding, agentic AI, multi-modal learning, computer vision, deep learning">
+  <meta name="author" content="Yiming Zhao, Yu Zeng, Wenxuan Huang, Zhen Fang, Qing Miao, Qisheng Su, Jiawei Zhao, Jiayin Cai, Lin Chen, Zehui Chen, Yukun Qi, Yao Hu, Xiaolong Jiang, Feng Zhao">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="USTC & Xiaohongshu">
+  <meta property="og:title" content="VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation">
+  <meta property="og:description" content="VideoSeeker proposes a novel framework for instance-level video understanding through native agentic tool invocation.">
+  <meta property="og:url" content="https://gaotiexinqu.github.io/VideoSeeker/">
+  <meta property="og:image" content="static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="VideoSeeker - Research Preview">
+  <meta property="article:published_time" content="2026-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Yiming Zhao">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="video understanding">
+  <meta property="article:tag" content="agentic AI">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="">
+  <meta name="twitter:creator" content="">
+  <meta name="twitter:title" content="VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation">
+  <meta name="twitter:description" content="VideoSeeker proposes a novel framework for instance-level video understanding through native agentic tool invocation.">
+  <meta name="twitter:image" content="static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="VideoSeeker - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation">
+  <meta name="citation_author" content="Yiming Zhao">
+  <meta name="citation_author" content="Yu Zeng">
+  <meta name="citation_author" content="Wenxuan Huang">
+  <meta name="citation_author" content="Zhen Fang">
+  <meta name="citation_author" content="Qing Miao">
+  <meta name="citation_author" content="Qisheng Su">
+  <meta name="citation_author" content="Jiawei Zhao">
+  <meta name="citation_author" content="Jiayin Cai">
+  <meta name="citation_author" content="Lin Chen">
+  <meta name="citation_author" content="Zehui Chen">
+  <meta name="citation_author" content="Yukun Qi">
+  <meta name="citation_author" content="Yao Hu">
+  <meta name="citation_author" content="Xiaolong Jiang">
+  <meta name="citation_author" content="Feng Zhao">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="NeurIPS 2026">
+  <meta name="citation_pdf_url" content="https://gaotiexinqu.github.io/VideoSeeker/static/pdfs/paper.pdf">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+
+  <title>VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation | NeurIPS 2026</title>
+  
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+  
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation",
+    "description": "VideoSeeker proposes a novel framework for instance-level video understanding through native agentic tool invocation.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Yiming Zhao",
+        "affiliation": [
+          {"@type": "Organization", "name": "University of Science and Technology of China"},
+          {"@type": "Organization", "name": "Xiaohongshu Inc."}
+        ]
+      },
+      {
+        "@type": "Person",
+        "name": "Yu Zeng",
+        "affiliation": [
+          {"@type": "Organization", "name": "University of Science and Technology of China"},
+          {"@type": "Organization", "name": "Xiaohongshu Inc."}
+        ]
+      },
+      {
+        "@type": "Person",
+        "name": "Wenxuan Huang",
+        "affiliation": [
+          {"@type": "Organization", "name": "Xiaohongshu Inc."},
+          {"@type": "Organization", "name": "East China Normal University"}
+        ]
+      },
+      {
+        "@type": "Person",
+        "name": "Zhen Fang",
+        "affiliation": [
+          {"@type": "Organization", "name": "University of Science and Technology of China"},
+          {"@type": "Organization", "name": "Xiaohongshu Inc."}
+        ]
+      },
+      {
+        "@type": "Person",
+        "name": "Qing Miao",
+        "affiliation": {"@type": "Organization", "name": "Xi'an Jiaotong University"}
+      },
+      {
+        "@type": "Person",
+        "name": "Qisheng Su",
+        "affiliation": {"@type": "Organization", "name": "University of Science and Technology of China"}
+      },
+      {
+        "@type": "Person",
+        "name": "Jiawei Zhao",
+        "affiliation": {"@type": "Organization", "name": "Xiaohongshu Inc."}
+      },
+      {
+        "@type": "Person",
+        "name": "Jiayin Cai",
+        "affiliation": {"@type": "Organization", "name": "Xiaohongshu Inc."}
+      },
+      {
+        "@type": "Person",
+        "name": "Lin Chen",
+        "affiliation": {"@type": "Organization", "name": "University of Science and Technology of China"}
+      },
+      {
+        "@type": "Person",
+        "name": "Zehui Chen",
+        "affiliation": {"@type": "Organization", "name": "University of Science and Technology of China"}
+      },
+      {
+        "@type": "Person",
+        "name": "Yukun Qi",
+        "affiliation": {"@type": "Organization", "name": "University of Science and Technology of China"}
+      },
+      {
+        "@type": "Person",
+        "name": "Yao Hu",
+        "affiliation": {"@type": "Organization", "name": "Xiaohongshu Inc."}
+      },
+      {
+        "@type": "Person",
+        "name": "Xiaolong Jiang",
+        "affiliation": {"@type": "Organization", "name": "Xiaohongshu Inc."}
+      },
+      {
+        "@type": "Person",
+        "name": "Feng Zhao",
+        "affiliation": {"@type": "Organization", "name": "University of Science and Technology of China"}
+      }
+    ],
+    "datePublished": "2026-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "NeurIPS 2026"
+    },
+    "url": "https://gaotiexinqu.github.io/VideoSeeker/",
+    "image": "static/images/social_preview.png",
+    "keywords": ["video understanding", "agentic AI", "multi-modal learning", "computer vision", "deep learning"],
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/"
+  }
+  </script>
+  
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "USTC & Xiaohongshu",
+    "url": "https://www.ustc.edu.cn",
+    "logo": "static/images/favicon.ico",
+    "sameAs": [
+      "https://github.com/gaotiexinqu"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Works Dropdown -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="Quick Navigation">
+      <i class="fas fa-compass"></i>
+      Quick Navigation
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>Quick Navigation</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="works-list">
+        <a href="#Abstract" class="work-item nav-item" onclick="closeDropdown()">
+          <div class="work-info">
+            <h5>Abstract</h5>
+            <p>Paper summary and overview</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="#Contributions" class="work-item nav-item" onclick="closeDropdown()">
+          <div class="work-info">
+            <h5>Key Contributions</h5>
+            <p>Main contributions and highlights</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="#Method" class="work-item nav-item" onclick="closeDropdown()">
+          <div class="work-info">
+            <h5>Method Overview</h5>
+            <p>Technical details and approach</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="#Results" class="work-item nav-item" onclick="closeDropdown()">
+          <div class="work-info">
+            <h5>Main Results</h5>
+            <p>Benchmark performance</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="#Findings" class="work-item nav-item" onclick="closeDropdown()">
+          <div class="work-info">
+            <h5>Key Findings</h5>
+            <p>Important insights and discoveries</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="#BibTeX" class="work-item nav-item" onclick="closeDropdown()">
+          <div class="work-info">
+            <h5>BibTeX</h5>
+            <p>Citation information</p>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="#">Yiming Zhao<sup>1,2,*</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Yu Zeng<sup>1,2,*</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Wenxuan Huang<sup>2,3,*</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Zhen Fang<sup>1,2,*</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Qing Miao<sup>4</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Qisheng Su<sup>1</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Jiawei Zhao<sup>2</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Jiayin Cai<sup>2</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Lin Chen<sup>1</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Zehui Chen<sup>1</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Yukun Qi<sup>1</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Yao Hu<sup>2</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Xiaolong Jiang<sup>2</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="#">Feng Zhao<sup>1,#</sup></a>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <sup>1</sup> University of Science and Technology of China
+              </span>
+              <span class="author-block">
+                <sup>2</sup> Xiaohongshu Inc.
+              </span>
+              <span class="author-block">
+                <sup>3</sup> East China Normal University
+              </span>
+              <span class="author-block">
+                <sup>4</sup> Xi'an Jiaotong University
+              </span>
+              <span class="eql-cntrb"><small><br><sup>*</sup>Equal Contribution &nbsp; <sup>#</sup>Corresponding Author</small></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2605.16079" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv Paper</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://github.com/gaotiexinqu/VideoSeeker" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://huggingface.co/papers/2605.16079" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-newspaper"></i>
+                    </span>
+                    <span>Daily Paper</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="#" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-robot"></i>
+                    </span>
+                    <span>Model</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="#" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-database"></i>
+                    </span>
+                    <span>Data</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<!-- Paper abstract -->
+<section class="section hero is-light" id="Abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Large Vision-Language Models (LVLMs) have shown significant progress in video understanding, yet they face substantial challenges in tasks requiring precise spatiotemporal localization at the instance level. Existing methods primarily rely on text prompts for human-model interaction, but these prompts struggle to provide precise spatial and temporal references, resulting in poor user experience. Furthermore, current approaches typically decouple visual perception from language reasoning, centering reasoning around language rather than visual content, which limits the model's ability to proactively perceive fine-grained visual evidence. To address these challenges, we propose <strong>VideoSeeker</strong>, a novel paradigm for instance-level video understanding through visual prompts. VideoSeeker seamlessly integrates agentic reasoning with instance-level video understanding tasks, enabling the model to proactively perceive and retrieve relevant video segments on demand. We construct a four-stage fully automated data synthesis pipeline to efficiently generate large-scale, high-quality instance-level video data. We internalize tool-calling and proactive perception capabilities into the model via cold-start supervision and RL training, building a powerful video understanding model. Experiments demonstrate that our model achieves an average improvement of +13.7% over baselines on instance-level video understanding tasks, surpassing powerful closed-source models such as GPT-4o and Gemini-2.5-Pro, while also showing effective transferability on general video understanding benchmarks.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<!-- Key Contributions -->
+<section class="section hero is-light" id="Contributions">
+  <div class="container">
+    <h2 class="title is-3 has-text-centered">Key Contributions</h2>
+    <div class="columns is-variable is-8">
+      <div class="column">
+        <div class="contribution-card contribution-card-primary">
+          <div class="contribution-icon">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h4 class="contribution-title">Novel Agentic Paradigm</h4>
+          <p>We propose <strong>VideoSeeker</strong>, an agentic instance-level video understanding paradigm that breaks through the limitations of text queries and achieves more precise spatial and temporal references through visual prompts.</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="contribution-card contribution-card-secondary">
+          <div class="contribution-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <h4 class="contribution-title">Automated Data Pipeline</h4>
+          <p>We construct a four-stage instance-level video question answering data synthesis pipeline that efficiently generates large-scale, high-quality instance-level video data (34.2k SFT samples, 4.1k RL samples).</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="contribution-card contribution-card-accent">
+          <div class="contribution-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h4 class="contribution-title">Superior Performance</h4>
+          <p>VideoSeeker achieves an average improvement of <strong>+13.7%</strong> over baselines on instance-level video understanding tasks, surpassing GPT-4o and Gemini-2.5-Pro while also showing effective transferability to general video understanding scenarios.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Key Contributions -->
+
+
+<!-- Method Overview -->
+<section class="hero is-small" id="Method">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Method Overview</h2>
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="method-content">
+            <figure class="image">
+              <img src="static/images/main.png" alt="VideoSeeker Overview" loading="lazy">
+            </figure>
+            <p class="has-text-centered" style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-secondary);">
+              <em>Figure: Overview of VideoSeeker. (A) Instance-level video understanding tasks require models to accurately locate and reason about specific instances in videos guided by visual prompts. (B) Pipeline overview: four-stage automated data synthesis pipeline + two-stage training strategy.</em>
+            </p>
+
+            <h3 class="title is-4">Task Formulation</h3>
+            <p>Given a query <em>Q</em>, a visual prompt frame <em>F<sub>vp</sub></em>, and a video <em>V</em>, the goal of instance-level video understanding is to accurately answer query <em>Q</em> with respect to the specific instance indicated by <em>F<sub>vp</sub></em>.</p>
+
+            <h3 class="title is-4" style="margin-top: 2rem;">Environmental Interaction</h3>
+            <p>The policy model interacts with the video environment through multi-turn active perception control, equipped with a perception tool set:</p>
+            <ul>
+              <li><strong>view_visual_prompt:</strong> Continuously provides visual prompt frames, maintaining a cognitive anchor of the target instance appearance</li>
+              <li><strong>crop_video:</strong> Endows the model with fine-grained local observation capability for filtering keyframes</li>
+            </ul>
+
+            <h3 class="title is-4" style="margin-top: 2rem;">Data Construction</h3>
+            <figure class="image" style="margin-top: 2rem;">
+              <img src="static/images/data.png" alt="Data Pipeline" loading="lazy">
+            </figure>
+            <p class="has-text-centered" style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-secondary);">
+              <em>Figure: Four-stage Data Pipeline. (1) Low-cost Text Filtering, (2) Video-level Verification, (3) Pixel-level Mask Generation, (4) Visual Prompt Rendering.</em>
+            </p>
+
+            <h3 class="title is-4" style="margin-top: 2rem;">Training Strategy</h3>
+            <div class="training-steps">
+              <div class="training-step">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <h5>Cold-start SFT</h5>
+                  <p>34.2k high-quality trajectories for foundational tool-calling behaviors</p>
+                </div>
+              </div>
+              <div class="training-step">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <h5>Agentic RL (GRPO)</h5>
+                  <p>4.1k curated samples with three-component reward: accuracy, format compliance, and parsimony</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Method Overview -->
+
+
+
+
+<!-- Main Results -->
+<section class="hero is-small is-light" id="Results">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Main Results</h2>
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <figure class="image">
+            <img src="static/images/bench.png" alt="Benchmark Results" loading="lazy">
+          </figure>
+          <p class="has-text-centered" style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-secondary);">
+            <em>Figure: Performance comparison on V2P-Bench and general video understanding benchmarks.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Main Results -->
+
+
+<!-- Key Findings -->
+<section class="section hero is-light" id="Findings">
+  <div class="container">
+    <h2 class="title is-3 has-text-centered">Key Findings</h2>
+    <div class="columns is-variable is-8">
+      <div class="column">
+        <div class="contribution-card contribution-card-primary">
+          <div class="contribution-icon">
+            <i class="fas fa-globe"></i>
+          </div>
+          <h4 class="contribution-title">Generalization to General Video Understanding</h4>
+          <p>Despite being trained exclusively on instance-level video understanding tasks, VideoSeeker demonstrates strong cross-task generalization on general video benchmarks, achieving <strong>+3.2%</strong> and <strong>+3.3%</strong> improvements. This reveals that core capabilities learned from instance-level tasks, such as long-range visual reasoning and multi-turn reasoning, transfer compositionally to broader video understanding scenarios.</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="contribution-card contribution-card-secondary">
+          <div class="contribution-icon">
+            <i class="fas fa-flask"></i>
+          </div>
+          <h4 class="contribution-title">The Heterogeneous Distillation Paradox</h4>
+          <p>We discover that <strong>the raw capability of a teacher model does not proportionally transfer to distillation performance</strong>. In homogeneous distillation, teachers and students share similar patterns, enabling efficient knowledge transfer; in heterogeneous distillation, pattern divergence is significant, causing stronger teachers' knowledge to be less effectively absorbed.</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="contribution-card contribution-card-accent">
+          <div class="contribution-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h4 class="contribution-title">Reward Hacking on Multiple-Choice Data</h4>
+          <p>RL training on multiple-choice (MC) data leads to a significant performance drop (43.8%) as models exploit random guessing. In contrast, open-ended (OE) training with LLM judges achieves <strong>74.5%</strong>, demonstrating that OE provides a more robust strategy for RL training.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Key Findings -->
+
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{zhao2026videoseeker,
+  title={VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation},
+  author={Zhao, Yiming and Zeng, Yu and Huang, Wenxuan and Fang, Zhen and Miao, Qing and Su, Qisheng and Zhao, Jiawei and Cai, Jiayin and Chen, Lin and Chen, Zehui and Qi, Yukun and Hu, Yao and Jiang, Xiaolong and Zhao, Feng},
+  institution={{ University of Science and Technology of China, Xiaohongshu Inc., East China Normal University, Xi'an Jiaotong University}},
+  journal={arXiv preprint arXiv:2605.16079},
+  year={2026},
+  url={https://arxiv.org/abs/2605.16079}
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page presents VideoSeeker, an efficient video-centric large language model for open-ended video understanding, and is adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
