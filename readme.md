@@ -124,7 +124,7 @@ bash eval/calu_metrics/longvt/start_judge.sh
 @article{zhao2026videoseeker,
   title={VideoSeeker: Incentivizing Instance-level Video Understanding via Native Agentic Tool Invocation},
   author={Yiming Zhao and Yu Zeng and Wenxuan Huang and Zhen Fang and Qing Miao and Qisheng Su and Jiawei Zhao and Jiayin Cai and Lin Chen and Zehui Chen and Yukun Qi and Yao Hu and Xiaolong Jiang and Feng Zhao},
-  journal={arXiv preprint arXiv:2605.xxxxx},
+  journal={arXiv preprint arXiv:2605.16079},
   year={2026}
 }
 ```
